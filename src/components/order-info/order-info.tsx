@@ -18,6 +18,7 @@ export const OrderInfo: FC = () => {
     if (!orderData || !ingredients.length) return null;
 
     const date = new Date(orderData.createdAt);
+    
 
     type TIngredientsWithCount = {
       [key: string]: TIngredient & { count: number };

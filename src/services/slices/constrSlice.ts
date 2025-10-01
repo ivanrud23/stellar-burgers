@@ -106,7 +106,7 @@ const constrSlice = createSlice({
   }
 });
 
-export const { addIngredient, removeIngredient, clearConstructor, setBun } =
+export const { addIngredient, removeIngredient, clearConstructor, setBun, moveIngredient } =
   constrSlice.actions;
 
 export default constrSlice.reducer;

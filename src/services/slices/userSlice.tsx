@@ -13,7 +13,12 @@ import { setCookie, deleteCookie } from '@utils-cookie';
 export const loginUserThunk = createAsyncThunk(
   'users/loginUser',
   ({ email, password }: { email: string; password: string }) =>
-    loginUserApi({ email, password })
+    loginUserApi({ email, password }).then((data) => {
+      localStorage.setItem('refreshToken', data.refreshToken);
+      setCookie('accessToken', data.accessToken);
+      return data;
+    })
+  
 );
 
 export const registerUserThunk = createAsyncThunk(
@@ -26,7 +31,11 @@ export const registerUserThunk = createAsyncThunk(
     email: string;
     name: string;
     password: string;
-  }) => registerUserApi({ email, name, password })
+  }) => registerUserApi({ email, name, password }).then((data) => {
+    localStorage.setItem('refreshToken', data.refreshToken);
+    setCookie('accessToken', data.accessToken);
+    return data;
+  })
 );
 
 export const updateUserThunk = createAsyncThunk(
@@ -36,7 +45,11 @@ export const updateUserThunk = createAsyncThunk(
 );
 
 export const logoutUserThunk = createAsyncThunk('users/logoutUser', () =>
-  logoutApi()
+  logoutApi().then((data) => {
+    localStorage.removeItem('refreshToken');
+    deleteCookie('accessToken');
+    return data;
+  })
 );
 
 export const getUserOrdersThunk = createAsyncThunk('users/getOrders', () =>
@@ -87,8 +100,6 @@ export const userSlice = createSlice({
       state.isAuth = true;
       state.user = action.payload.user;
       state.error = null;
-      localStorage.setItem('refreshToken', action.payload.refreshToken);
-      setCookie('accessToken', action.payload.accessToken);
     });
     builder.addCase(registerUserThunk.pending, (state) => {
       state.isLoading = true;
@@ -102,8 +113,6 @@ export const userSlice = createSlice({
       state.isAuth = true;
       state.user = action.payload.user;
       state.error = null;
-      localStorage.setItem('accessToken', action.payload.accessToken);
-      localStorage.setItem('refreshToken', action.payload.refreshToken);
     });
     builder.addCase(updateUserThunk.pending, (state) => {
       state.isLoading = true;
@@ -129,8 +138,6 @@ export const userSlice = createSlice({
       state.isAuth = false;
       state.user = null;
       state.error = null;
-      localStorage.removeItem('refreshToken');
-      deleteCookie('accessToken');
     });
     builder.addCase(getUserOrdersThunk.pending, (state) => {
       state.isOrdersLoading = true;
