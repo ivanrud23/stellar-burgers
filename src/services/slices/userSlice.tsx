@@ -18,7 +18,6 @@ export const loginUserThunk = createAsyncThunk(
       setCookie('accessToken', data.accessToken);
       return data;
     })
-  
 );
 
 export const registerUserThunk = createAsyncThunk(
@@ -31,11 +30,12 @@ export const registerUserThunk = createAsyncThunk(
     email: string;
     name: string;
     password: string;
-  }) => registerUserApi({ email, name, password }).then((data) => {
-    localStorage.setItem('refreshToken', data.refreshToken);
-    setCookie('accessToken', data.accessToken);
-    return data;
-  })
+  }) =>
+    registerUserApi({ email, name, password }).then((data) => {
+      localStorage.setItem('refreshToken', data.refreshToken);
+      setCookie('accessToken', data.accessToken);
+      return data;
+    })
 );
 
 export const updateUserThunk = createAsyncThunk(

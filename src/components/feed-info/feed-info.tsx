@@ -10,17 +10,17 @@ const getOrders = (orders: TOrder[], status: string): number[] =>
     .slice(0, 20);
 
 export const FeedInfo: FC = () => {
-  const { orders, ...feed } = useSelector((state) => state.feed.ordersData);
+  const ordersData = useSelector((state) => state.feed.ordersData);
 
-  const readyOrders = getOrders(orders, 'done');
+  const readyOrders = getOrders(ordersData.orders, 'done');
 
-  const pendingOrders = getOrders(orders, 'pending');
+  const pendingOrders = getOrders(ordersData.orders, 'pending');
 
   return (
     <FeedInfoUI
       readyOrders={readyOrders}
       pendingOrders={pendingOrders}
-      feed={feed}
+      feed={ordersData}
     />
   );
 };

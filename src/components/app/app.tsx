@@ -11,7 +11,7 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import { ProtectedRoute } from '../ProtectedRoute';
 import { OrderInfo } from '../order-info';
 import { IngredientDetails } from '../ingredient-details';
@@ -21,7 +21,7 @@ import { getIngredientsThunk } from '@slices/ingredientsSlice';
 import { getUserThunk } from '@slices/userSlice';
 import { AppHeader, Modal } from '@components';
 import { useDispatch, useSelector } from '@store';
-import store from '@store';
+
 import { useEffect } from 'react';
 
 const App = () => {
@@ -35,6 +35,23 @@ const App = () => {
 
   const handleClose = () => {
     navigate(-1);
+  };
+
+  const OrderModalWrapper = () => {
+    const { number } = useParams();
+    const navigate = useNavigate();
+
+    const handleClose = () => navigate(-1);
+
+    return (
+      <Modal
+        title={`#${number}`}
+        onClose={handleClose}
+        titleClassName={styles.orderTitle}
+      >
+        <OrderInfo />
+      </Modal>
+    );
   };
 
   return (
@@ -92,18 +109,11 @@ const App = () => {
           }
         />
         <Route path='*' element={<NotFound404 />} />
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal title='Заголовок OrderInfo' onClose={handleClose}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
+        <Route path='/feed/:number' element={<OrderModalWrapper />} />
         <Route
           path='/ingredients/:id'
           element={
-            <Modal title='Заголовок IngredientDetails' onClose={handleClose}>
+            <Modal title='' onClose={handleClose}>
               <IngredientDetails />
             </Modal>
           }
@@ -112,12 +122,7 @@ const App = () => {
           path='/profile/orders/:number'
           element={
             <ProtectedRoute>
-              <Modal
-                title='Заголовок Protected OrderInfo'
-                onClose={handleClose}
-              >
-                <OrderInfo />
-              </Modal>
+              <OrderModalWrapper />
             </ProtectedRoute>
           }
         />

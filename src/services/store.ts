@@ -17,21 +17,12 @@ const appReducer = combineReducers({
   user: userSlice
 });
 
-const rootReducer = (
-  state: ReturnType<typeof appReducer> | undefined,
-  action: any
-) => {
-  const nextState = appReducer(state, action);
-
-  return nextState;
-};
-
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: appReducer,
   devTools: process.env.NODE_ENV !== 'production'
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof appReducer>;
 export type AppDispatch = typeof store.dispatch;
 
 export const useDispatch: () => AppDispatch = () => dispatchHook();
