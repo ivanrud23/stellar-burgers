@@ -26,3 +26,11 @@
 .detailHeader {
   text-align: center;
 }
+
+.orderTitle {
+  font-family: Iceland;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 86%;
+  text-align: left;
+}
