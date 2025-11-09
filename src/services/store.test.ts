@@ -1,8 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import ingredientsSlice from '@slices/ingredientsSlice';
-import constrSlice from '@slices/constrSlice';
-import feedSlice from '@slices/feedSlice';
-import userSlice from '@slices/userSlice';
+import ingredientsSlice, {
+  initialState as ingredientsInitial
+} from '@slices/ingredientsSlice';
+import constrSlice, {
+  initialState as constrInitial
+} from '@slices/constrSlice';
+import feedSlice, { initialState as feedInitial } from '@slices/feedSlice';
+import userSlice, { initialState as userInitial } from '@slices/userSlice';
 import { describe, expect, test } from '@jest/globals';
 
 const appReducer = combineReducers({
@@ -21,33 +25,9 @@ describe('Тесты на Jest', () => {
     expect(state).toHaveProperty('feed');
     expect(state).toHaveProperty('user');
 
-    expect(state.ingredients).toEqual({
-      items: [],
-      loading: false,
-      error: null
-    });
-
-    expect(state.constr).toEqual({
-      bun: null,
-      ingredients: [],
-      orderRequest: false,
-      orderModalData: null
-    });
-
-    expect(state.feed).toEqual({
-      ordersData: { orders: [], total: 0, totalToday: 0 },
-      loading: false,
-      error: null
-    });
-
-    expect(state.user).toEqual({
-      isAuth: false,
-      isLoading: false,
-      isOrdersLoading: false,
-      authChecked: false,
-      user: null,
-      error: null,
-      orders: []
-    });
+    expect(state.ingredients).toEqual(ingredientsInitial);
+    expect(state.constr).toEqual(constrInitial);
+    expect(state.feed).toEqual(feedInitial);
+    expect(state.user).toEqual(userInitial);
   });
 });

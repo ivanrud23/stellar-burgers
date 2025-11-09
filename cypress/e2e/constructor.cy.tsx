@@ -1,33 +1,42 @@
 describe('Cypress tests', () => {
+
+  const testAccessToken = 'Bearer test-access-token';
+  const testRefreshToken = 'test-refresh-token';
+
   beforeEach(() => {
+
+    window.localStorage.setItem('accessToken', testAccessToken);
+
     cy.intercept('GET', 'ingredients', { fixture: 'ingredients.json' }).as(
       'getIngredients'
     );
     cy.intercept('GET', 'api/auth/user', { fixture: 'user.json' }).as(
       'getUser'
     );
-    cy.intercept('POST', 'orders', { fixture: 'orders.json' }).as(
-      'createOrder'
-    );
+    cy.intercept('POST', 'orders', (req) => {
+      expect(req.headers.authorization).to.equal(testAccessToken);
+      req.reply({ fixture: 'orders.json' });
+    }).as('createOrder');
 
-    cy.visit('http://localhost:4000');
+    cy.visit('http://localhost:4000', {
+      onBeforeLoad(win) {
+        win.document.cookie = `accessToken=${testAccessToken}`;
+        win.localStorage.setItem('refreshToken', testRefreshToken);
+      }
+    });
 
     cy.wait('@getIngredients');
     cy.wait('@getUser');
   });
 
-  it('Проверка добавления булки и начинки в конструктор', () => {
-    cy.get('[data-cy=ingredient]')
-      .contains('Флюоресцентная булка R2-D3')
-      .parent()
-      .find('button')
-      .click();
+  afterEach(() => {
+    window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('refreshToken');
+  });
 
-    cy.get('[data-cy=ingredient]')
-      .contains('Мясо бессмертных моллюсков Protostomia')
-      .parent()
-      .find('button')
-      .click();
+  it('Проверка добавления булки и начинки в конструктор', () => {
+    cy.addIngredient('Флюоресцентная булка R2-D3');
+    cy.addIngredient('Мясо бессмертных моллюсков Protostomia');
 
     cy.get('[data-cy=top-bun]')
       .contains('Флюоресцентная булка R2-D3 (верх)')
@@ -41,8 +50,9 @@ describe('Cypress tests', () => {
   });
 
   it('Проверка модального окна по крестику', () => {
-    cy.contains('Флюоресцентная булка R2-D3').should('exist');
-    cy.contains('Флюоресцентная булка R2-D3').parent().click();
+    cy.contains('Флюоресцентная булка R2-D3').as('bunIngredient');
+    cy.get('@bunIngredient').should('exist');
+    cy.get('@bunIngredient').parent().click();
 
     cy.get('[data-cy=modal]').should('exist');
     cy.get('[data-cy=modal]').within(() => {
@@ -64,17 +74,8 @@ describe('Cypress tests', () => {
   });
 
   it('Проверка создания заказа', () => {
-    cy.get('[data-cy=ingredient]')
-      .contains('Флюоресцентная булка R2-D3')
-      .parent()
-      .find('button')
-      .click();
-
-    cy.get('[data-cy=ingredient]')
-      .contains('Мясо бессмертных моллюсков Protostomia')
-      .parent()
-      .find('button')
-      .click();
+    cy.addIngredient('Флюоресцентная булка R2-D3');
+    cy.addIngredient('Мясо бессмертных моллюсков Protostomia');
 
     cy.get('[data-cy=orders]')
       .find('button')
