@@ -16,7 +16,7 @@ export type TConstState = {
   orderModalData: TOrder | null;
 };
 
-const initialState: TConstState = {
+export const initialState: TConstState = {
   bun: null,
   ingredients: [],
   orderRequest: false,

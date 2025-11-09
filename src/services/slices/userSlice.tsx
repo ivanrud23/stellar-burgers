@@ -70,7 +70,7 @@ export type TUserState = {
   orders: TOrder[];
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuth: false,
   isLoading: false,
   isOrdersLoading: false,
