@@ -13,7 +13,6 @@ const appReducer = combineReducers({
 });
 
 describe('Тесты на Jest', () => {
-
   test('Проверка инициализации', () => {
     const state = appReducer(undefined, { type: '' });
 
@@ -25,20 +24,20 @@ describe('Тесты на Jest', () => {
     expect(state.ingredients).toEqual({
       items: [],
       loading: false,
-      error: null,
+      error: null
     });
 
     expect(state.constr).toEqual({
       bun: null,
       ingredients: [],
       orderRequest: false,
-      orderModalData: null,
+      orderModalData: null
     });
 
     expect(state.feed).toEqual({
       ordersData: { orders: [], total: 0, totalToday: 0 },
       loading: false,
-      error: null,
+      error: null
     });
 
     expect(state.user).toEqual({
@@ -48,10 +47,7 @@ describe('Тесты на Jest', () => {
       authChecked: false,
       user: null,
       error: null,
-      orders: [],
+      orders: []
     });
   });
-
-
-  
 });

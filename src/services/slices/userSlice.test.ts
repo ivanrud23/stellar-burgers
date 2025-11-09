@@ -1,5 +1,9 @@
 import { describe, expect, test } from '@jest/globals';
-import userReducer, { TUserState, loginUserThunk, getUserThunk } from './userSlice';
+import userReducer, {
+  TUserState,
+  loginUserThunk,
+  getUserThunk
+} from './userSlice';
 import { TUser } from '@utils-types';
 
 describe('userSlice reducer', () => {
@@ -21,7 +25,10 @@ describe('userSlice reducer', () => {
   const fakeArg = { email: 'test@test.com', password: '123456' };
 
   test('loginUserThunk.pending: isLoading = true', () => {
-    const nextState = userReducer(initialState, loginUserThunk.pending('', fakeArg));
+    const nextState = userReducer(
+      initialState,
+      loginUserThunk.pending('', fakeArg)
+    );
     expect(nextState.isLoading).toBe(true);
     expect(nextState.error).toBeNull();
   });
@@ -29,7 +36,11 @@ describe('userSlice reducer', () => {
   test('loginUserThunk.fulfilled: сохраняем user, isLoading = false, isAuth = true', () => {
     const nextState = userReducer(
       initialState,
-      loginUserThunk.fulfilled({ success: true, user: mockUser, accessToken: '', refreshToken: '' }, '', fakeArg)
+      loginUserThunk.fulfilled(
+        { success: true, user: mockUser, accessToken: '', refreshToken: '' },
+        '',
+        fakeArg
+      )
     );
     expect(nextState.isLoading).toBe(false);
     expect(nextState.isAuth).toBe(true);
@@ -47,7 +58,10 @@ describe('userSlice reducer', () => {
   });
 
   test('getUserThunk.pending: isLoading = true', () => {
-    const nextState = userReducer(initialState, getUserThunk.pending('', undefined));
+    const nextState = userReducer(
+      initialState,
+      getUserThunk.pending('', undefined)
+    );
     expect(nextState.isLoading).toBe(true);
   });
 
@@ -63,7 +77,10 @@ describe('userSlice reducer', () => {
   });
 
   test('getUserThunk.rejected: isLoading = false, authChecked = true', () => {
-    const nextState = userReducer(initialState, getUserThunk.rejected(new Error('Ошибка'), '', undefined));
+    const nextState = userReducer(
+      initialState,
+      getUserThunk.rejected(new Error('Ошибка'), '', undefined)
+    );
     expect(nextState.isLoading).toBe(false);
     expect(nextState.isAuth).toBe(false);
     expect(nextState.authChecked).toBe(true);

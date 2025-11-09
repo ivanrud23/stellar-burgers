@@ -1,5 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import ingredientsReducer, { getIngredientsThunk, TIngredientsState } from './ingredientsSlice';
+import ingredientsReducer, {
+  getIngredientsThunk,
+  TIngredientsState
+} from './ingredientsSlice';
 import { TIngredient } from '@utils-types';
 
 describe('ingredientsSlice reducer', () => {
@@ -39,13 +42,19 @@ describe('ingredientsSlice reducer', () => {
   ];
 
   test('pending: при вызове getIngredientsThunk.loading становится true', () => {
-    const nextState = ingredientsReducer(initialState, getIngredientsThunk.pending('', undefined));
+    const nextState = ingredientsReducer(
+      initialState,
+      getIngredientsThunk.pending('', undefined)
+    );
     expect(nextState.loading).toBe(true);
     expect(nextState.error).toBeNull();
   });
 
   test('fulfilled: данные сохраняются в store, loading = false', () => {
-    const nextState = ingredientsReducer(initialState, getIngredientsThunk.fulfilled(mockIngredients, '', undefined));
+    const nextState = ingredientsReducer(
+      initialState,
+      getIngredientsThunk.fulfilled(mockIngredients, '', undefined)
+    );
     expect(nextState.loading).toBe(false);
     expect(nextState.items).toEqual(mockIngredients);
     expect(nextState.error).toBeNull();
@@ -53,11 +62,14 @@ describe('ingredientsSlice reducer', () => {
 
   test('rejected: ошибка сохраняется, loading = false', () => {
     const errorMessage = 'Ошибка загрузки ингредиентов';
-    const nextState = ingredientsReducer(initialState, getIngredientsThunk.rejected(
-  new Error(errorMessage),
-  '', // requestId
-  undefined
-));
+    const nextState = ingredientsReducer(
+      initialState,
+      getIngredientsThunk.rejected(
+        new Error(errorMessage),
+        '', // requestId
+        undefined
+      )
+    );
     expect(nextState.loading).toBe(false);
     expect(nextState.error).toBe(errorMessage);
   });

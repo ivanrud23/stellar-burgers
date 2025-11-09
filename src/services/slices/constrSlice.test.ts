@@ -30,12 +30,20 @@ describe('constrSlice reducer', () => {
   };
 
   test('должен добавить ингредиент (булку)', () => {
-    const nextState = constrReducer(initialState, addIngredient(mockIngredient));
+    const nextState = constrReducer(
+      initialState,
+      addIngredient(mockIngredient)
+    );
     expect(nextState.bun).toHaveProperty('_id', '123');
   });
 
   test('должен добавить ингредиент (начинку)', () => {
-    const filling = { ...mockIngredient, _id: '456', type: 'main', name: 'Котлета' };
+    const filling = {
+      ...mockIngredient,
+      _id: '456',
+      type: 'main',
+      name: 'Котлета'
+    };
     const nextState = constrReducer(initialState, addIngredient(filling));
     expect(nextState.ingredients.length).toBe(1);
     expect(nextState.ingredients[0]).toHaveProperty('_id', '456');
@@ -64,7 +72,10 @@ describe('constrSlice reducer', () => {
       ]
     };
 
-    const nextState = constrReducer(existingState, moveIngredient({ fromIndex: 0, toIndex: 1 }));
+    const nextState = constrReducer(
+      existingState,
+      moveIngredient({ fromIndex: 0, toIndex: 1 })
+    );
     expect(nextState.ingredients[0].id).toBe('b');
     expect(nextState.ingredients[1].id).toBe('a');
   });
